@@ -1,65 +1,58 @@
-import Image from "next/image";
+import { auth } from '@/auth';
+import Link from 'next/link';
+import Image from 'next/image';
+import DashboardWidgets from '@/components/dashboard/DashboardWidgets';
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+  // Determine the user's role, defaulting to 'guest' if they aren't logged in
+  const role = ((session?.user as any)?.role || 'guest').toLowerCase();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="container mx-auto p-6 flex flex-col items-center min-h-[calc(100vh-104px)] pt-12">
+      <div className="max-w-3xl flex flex-col items-center text-center space-y-6 mb-12">
+        <Image 
+          src="/cartconn_web.png" 
+          alt="Cartwright Connect" 
+          width={600} 
+          height={200} 
+          className="w-full max-w-md md:max-w-lg h-auto object-contain drop-shadow-sm mb-4"
+          quality={100}
+          priority 
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+      </div>
+
+      {/* Interactive Dashboard Widgets */}
+      <DashboardWidgets />
+
+      {/* Role-Specific Content Grid */}
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        {/* Visible to Everyone (Guest, User, Super, Admin) */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+          <h2 className="text-xl font-bold text-slate-800 mb-3">Cartwright Sites</h2>
+          <p className="text-slate-600 mb-4">Explore the public family feeds, photo galleries, and about us pages.</p>
+          <Link href="/cartwright-sites" className="text-blue-600 hover:text-blue-700 font-medium">Browse Sites &rarr;</Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        {/* Visible to Super and Admin */}
+        {(role === 'super' || role === 'admin') && (
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-200 bg-blue-50/30">
+            <h2 className="text-xl font-bold text-blue-900 mb-3">LustraDB Access</h2>
+            <p className="text-blue-800/80 mb-4">Access and manage the underlying databases for Household, Health, Auto, and Education.</p>
+            <Link href="/lustra-db" className="text-blue-700 hover:text-blue-800 font-semibold">Open LustraDB &rarr;</Link>
+          </div>
+        )}
+
+        {/* Visible to Admin Only */}
+        {role === 'admin' && (
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-purple-200 bg-purple-50/40">
+            <h2 className="text-xl font-bold text-purple-900 mb-3">System Administration</h2>
+            <p className="text-purple-800/80 mb-4">Manage system users, roles, core entities, and application settings.</p>
+            <Link href="/admin" className="text-purple-700 hover:text-purple-800 font-semibold">Open Admin Panel &rarr;</Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

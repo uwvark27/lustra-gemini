@@ -5,8 +5,15 @@ import { usePathname } from 'next/navigation';
 
 const subMenuMap: Record<string, { name: string; href: string }[]> = {
   '/admin': [
+    { name: 'Places', href: '/admin/places' },
+    { name: 'Entities', href: '/admin/entities' },
+    { name: 'Lifelog', href: '/admin/lifelog' },
+    { name: 'Attributes', href: '/admin/attributes' },
+    { name: 'Franchises', href: '/admin/franchises' },
+    { name: 'Brands', href: '/admin/brands' },
     { name: 'Users', href: '/admin/users' },
     { name: 'Roles', href: '/admin/roles' },
+    { name: 'Settings', href: '/admin/settings' },
   ],
   '/cartwright-sites': [
     { name: 'Family Feed', href: '/cartwright-sites/family-feed' },
@@ -28,7 +35,21 @@ const subMenuMap: Record<string, { name: string; href: string }[]> = {
     { name: 'Brewery Log', href: '/beer/brewery-log' },
     { name: 'Beer Map', href: '/beer/beer-map' },
     { name: 'Beer Stats', href: '/beer/beer-stats' },
-  ]
+  ],
+  '/media': [
+    { name: 'Book', href: '/media/book' },
+    { name: 'Comic Book', href: '/media/comic-book' },
+    { name: 'Games', href: '/media/games' },
+    { name: 'Movies', href: '/media/movies' },
+    { name: 'TV Shows', href: '/media/tv-shows' },
+    { name: 'Music', href: '/media/music' },
+  ],
+  '/events': [
+    { name: 'Event Checkin', href: '/events/event-checkin' },
+    { name: 'Weird Al', href: '/events/weird-al' },
+    { name: 'Concerts', href: '/events/concerts' },
+    { name: 'Sports', href: '/events/sports' },
+  ],
 };
 
 export default function SubToolbar() {
@@ -45,7 +66,7 @@ export default function SubToolbar() {
 
   return (
     <div className="bg-slate-100 border-b border-slate-200 shadow-sm">
-      <div className="container mx-auto px-4 h-10 flex space-x-6 text-sm font-semibold text-slate-600">
+      <div className="container mx-auto px-4 h-10 flex justify-center space-x-6 text-sm font-semibold text-slate-600">
         {subLinks.map((link) => {
           const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
           return (
@@ -61,4 +82,3 @@ export default function SubToolbar() {
     </div>
   );
 }
-
