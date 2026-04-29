@@ -21,12 +21,12 @@ export default function MainToolbar({ session }: { session: Session | null }) {
 
   const visibleLinks = navLinks.filter(link => {
     if (role === 'admin') return true; // Admins see all
-    if (role === 'super') return link.href !== '/admin'; // Supers see all except admin
+    if (role === 'super' || role === 'member') return link.href !== '/admin'; // Super & Member see all except admin
     return link.href === '/cartwright-sites'; // Users only see Cartwright Sites
   });
 
   return (
-    <header className="bg-slate-900 text-white shadow-md">
+    <header className="bg-slate-950 text-white">
       <div className="container mx-auto px-4 h-16 flex items-center">
         {/* Left Side: Logo */}
         <div className="flex-1 flex items-center h-full py-2">
@@ -63,12 +63,18 @@ export default function MainToolbar({ session }: { session: Session | null }) {
           <div className="flex items-center">
             {session?.user ? (
               <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-slate-300 hidden sm:block">{session.user.name}</span>
-                <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-600 overflow-hidden shadow-sm">
-                  <svg className="w-5 h-5 text-slate-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                  </svg>
-                </div>
+                <Link href="/profile" className="flex items-center space-x-2 group" title="My Profile">
+                  <span className="text-sm font-medium text-slate-300 hidden sm:block group-hover:text-white transition-colors">{session.user.name}</span>
+                  <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-600 overflow-hidden shadow-sm group-hover:border-blue-500 transition-colors">
+                    {session.user.image ? (
+                      <Image src={session.user.image} alt={session.user.name || 'Avatar'} width={32} height={32} className="object-cover w-full h-full" />
+                    ) : (
+                      <span className="text-xs font-bold text-slate-300 select-none">
+                        {(session.user.name || '?').split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
+                      </span>
+                    )}
+                  </div>
+                </Link>
                 <form action={logout}>
                   <button type="submit" className="text-slate-400 hover:text-white transition-colors" title="Log out">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

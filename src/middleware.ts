@@ -11,7 +11,7 @@ export default auth((req) => {
   const path = req.nextUrl.pathname;
 
   // Define public and authentication routes
-  const isPublicRoute = path === '/' || path.startsWith('/cartwright-sites');
+  const isPublicRoute = path === '/' || path.startsWith('/cartwright-sites') || path === '/profile';
   const isAuthRoute = path.startsWith('/login') || path.startsWith('/register');
 
   // 1. If hitting login/register while logged in, redirect to home
@@ -40,6 +40,14 @@ export default auth((req) => {
       return; // Super gets access to everything else
     }
 
+    if (role === 'member') {
+      // Member mirrors super but cannot access /admin or /lustra-db/relationship
+      if (path.startsWith('/admin') || path.startsWith('/lustra-db/relationship')) {
+        return Response.redirect(new URL('/', req.nextUrl));
+      }
+      return; // Member gets access to everything else
+    }
+
     // Standard user (only public routes allowed)
     if (!isPublicRoute) {
       return Response.redirect(new URL('/', req.nextUrl));
@@ -49,5 +57,5 @@ export default auth((req) => {
 
 // Configure the paths where the middleware should run
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico)$).*)'],
 };

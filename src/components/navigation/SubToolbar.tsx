@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import type { Session } from 'next-auth';
 
 const subMenuMap: Record<string, { name: string; href: string }[]> = {
   '/admin': [
@@ -28,6 +29,7 @@ const subMenuMap: Record<string, { name: string; href: string }[]> = {
     { name: 'Health', href: '/lustra-db/health' },
     { name: 'Auto', href: '/lustra-db/auto' },
     { name: 'Education', href: '/lustra-db/education' },
+    { name: 'Relationship', href: '/lustra-db/relationship' },
     { name: 'Links', href: '/lustra-db/links' },
   ],
   '/beer': [
@@ -52,28 +54,35 @@ const subMenuMap: Record<string, { name: string; href: string }[]> = {
   ],
 };
 
-export default function SubToolbar() {
+export default function SubToolbar({ session }: { session: Session | null }) {
   const pathname = usePathname();
+  const role = ((session?.user as any)?.role || 'user').toLowerCase();
 
   // Determine which main section we are in to show the correct sub-links
   const currentSection = Object.keys(subMenuMap).find((path) => 
     pathname.startsWith(path)
   );
   
-  const subLinks = currentSection ? subMenuMap[currentSection] : [];
+  const rawLinks = currentSection ? subMenuMap[currentSection] : [];
+
+  // Hide routes from members that they are not permitted to access
+  const subLinks = rawLinks.filter((link) => {
+    if (role === 'member' && link.href === '/lustra-db/relationship') return false;
+    return true;
+  });
 
   if (subLinks.length === 0) return null; // Hide sub-toolbar if no links match
 
   return (
-    <div className="bg-slate-100 border-b border-slate-200 shadow-sm">
-      <div className="container mx-auto px-4 h-10 flex justify-center space-x-6 text-sm font-semibold text-slate-600">
+    <div className="bg-slate-800 border-b border-slate-800 shadow-sm">
+      <div className="container mx-auto px-4 h-10 flex justify-center space-x-6 text-sm font-semibold text-slate-300">
         {subLinks.map((link) => {
           const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
           return (
-            <Link key={link.href} href={link.href} className={`relative flex items-center h-full transition-colors ${isActive ? 'text-blue-600' : 'hover:text-blue-500'}`}>
+            <Link key={link.href} href={link.href} className={`relative flex items-center h-full transition-colors ${isActive ? 'text-blue-400' : 'hover:text-blue-300'}`}>
               {link.name}
               {isActive && (
-                <span className="absolute left-1/2 bottom-0 h-[3px] w-1.5 -translate-x-1/2 rounded-t-full bg-blue-600 shadow-[0_0_8px_1px_rgba(37,99,235,0.8)]" />
+                <span className="absolute left-1/2 bottom-0 h-[3px] w-1.5 -translate-x-1/2 rounded-t-full bg-blue-400 shadow-[0_0_8px_1px_rgba(96,165,250,0.8)]" />
               )}
             </Link>
           );

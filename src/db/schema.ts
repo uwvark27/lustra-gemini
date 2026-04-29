@@ -1,6 +1,6 @@
 import { mysqlTable, varchar, timestamp, int, date, text } from 'drizzle-orm/mysql-core';
 
-export const entities = mysqlTable('ENTITIES', {
+export const entities = mysqlTable('entities', {
   id: int('entity_id').autoincrement().primaryKey(),
   type: varchar('entity_type', { length: 10 }),
   legalName: varchar('entity_legal_name', { length: 50 }),
@@ -34,6 +34,7 @@ export const users = mysqlTable('users', {
   password: varchar('password', { length: 255 }),
   roleId: int('role_id').references(() => roles.id),
   entityId: int('entity_id'),
+  avatarUrl: varchar('avatar_url', { length: 500 }),
   createdAt: timestamp('created_at').defaultNow(),
 });
 

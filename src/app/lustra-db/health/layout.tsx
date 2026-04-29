@@ -4,7 +4,6 @@ const HealthTabs = [
   { name: 'Activities', href: '/lustra-db/health/activities' },
   { name: 'Weight', href: '/lustra-db/health/weight' },
   { name: 'Personal Care', href: '/lustra-db/health/personal-care' },
-  { name: 'Coitus', href: '/lustra-db/health/coitus' },
   { name: 'Health Log', href: '/lustra-db/health/health-log' },
 ];
 

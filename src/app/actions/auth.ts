@@ -2,7 +2,7 @@
 
 import { signIn, signOut } from '@/auth';
 import { db } from '@/db';
-import { users } from '@/db/schema';
+import { users, roles } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
@@ -41,11 +41,16 @@ export async function register(prevState: any, formData: FormData) {
   // Hash the password securely
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  // Find the 'user' role ID to set as default
+  const defaultRole = await db.select({ id: roles.id }).from(roles).where(eq(roles.name, 'user')).limit(1);
+  const roleId = defaultRole.length > 0 ? defaultRole[0].id : null;
+
   // Insert new user into MariaDB
   await db.insert(users).values({
     name,
     email,
     password: hashedPassword,
+    roleId,
   });
 
   redirect('/login');

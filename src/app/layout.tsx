@@ -21,12 +21,14 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-white min-h-screen flex flex-col text-slate-900`}>
-        {/* Level 1 Toolbar: Available across the entire app */}
-        <MainToolbar session={session} />
-        
-        {/* Level 2 Toolbar: Dynamic based on route */}
-        <SubToolbar />
+      <body className={`${inter.className} bg-slate-950 min-h-screen flex flex-col text-slate-100`}>
+        <div className="sticky top-0 z-50 w-full flex flex-col shadow-sm">
+          {/* Level 1 Toolbar: Available across the entire app */}
+          <MainToolbar session={session} />
+          
+          {/* Level 2 Toolbar: Dynamic based on route */}
+          <SubToolbar session={session} />
+        </div>
         
         {/* Main Content Area */}
         <main className="flex-grow">

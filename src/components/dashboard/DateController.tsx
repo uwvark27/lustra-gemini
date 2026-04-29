@@ -48,16 +48,16 @@ export default function DateController({
   const inputValue = getLocalYYYYMMDD(selectedDate);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 w-full max-w-5xl">
+    <div className="bg-slate-900 rounded-xl shadow-sm border border-slate-800 p-6 mb-8 w-full max-w-5xl">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Left Side: Headers */}
         <div className="text-center md:text-left">
-          <h2 className="text-2xl font-bold text-slate-800 flex items-center justify-center md:justify-start gap-2">
-            <Calendar className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-bold text-slate-100 flex items-center justify-center md:justify-start gap-2">
+            <Calendar className="w-6 h-6 text-blue-400" />
             Today in Lustra
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
-            Today is <button onClick={() => onChange(new Date())} className="underline decoration-dotted underline-offset-4 hover:text-slate-700 transition-colors" title="Reset to today">
+          <p className="text-sm text-slate-400 mt-1">
+            Today is <button onClick={() => onChange(new Date())} className="underline decoration-dotted underline-offset-4 hover:text-slate-300 transition-colors" title="Reset to today">
               {today.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </button>
           </p>
@@ -65,18 +65,18 @@ export default function DateController({
 
         {/* Right Side: Interactive Date Controller */}
         <div className="flex flex-col items-center md:items-end gap-2">
-          <div className="flex items-center space-x-1 bg-slate-50 border border-slate-200 rounded-lg p-1 shadow-sm">
-            <button onClick={() => changeDate(-1)} className="p-2 hover:bg-slate-200 rounded-md transition-colors text-slate-600" title="Previous Day">
+          <div className="flex items-center space-x-1 bg-slate-950 border border-slate-800 rounded-lg p-1 shadow-sm">
+            <button onClick={() => changeDate(-1)} className="p-2 hover:bg-slate-800 rounded-md transition-colors text-slate-300" title="Previous Day">
               <ChevronLeft className="w-5 h-5" />
             </button>
             <div className="relative flex items-center px-2">
-              <input type="date" value={inputValue} onChange={handleDateChange} className="bg-transparent border-none focus:ring-0 text-slate-800 font-semibold cursor-pointer outline-none" />
+              <input type="date" value={inputValue} onChange={handleDateChange} className="bg-transparent border-none focus:ring-0 text-slate-100 font-semibold cursor-pointer outline-none" style={{ colorScheme: 'dark' }} />
             </div>
-            <button onClick={() => changeDate(1)} className="p-2 hover:bg-slate-200 rounded-md transition-colors text-slate-600" title="Next Day">
+            <button onClick={() => changeDate(1)} className="p-2 hover:bg-slate-800 rounded-md transition-colors text-slate-300" title="Next Day">
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>
-          <div className="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+          <div className="text-xs font-medium text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
             {isToday ? 'Viewing Today' : selectedDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} 
             {' '}• Day {getDayOfYear(selectedDate)} of {selectedDate.getFullYear()}
           </div>
